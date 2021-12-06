@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "xstring": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp",
+        "xlocale": "cpp",
+        "xlocnum": "cpp",
+        "istream": "cpp",
+        "string": "cpp",
+        "xlocmon": "cpp",
+        "xutility": "cpp"
+    },
+    "cSpell.ignoreRegExpList": [
+        ".*"
+    ]
+}
