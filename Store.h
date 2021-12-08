@@ -34,6 +34,14 @@ class Store {
         void addHead(Book &);
         void addAt(int, Book &);
 
+        // Delete
+        void deleteHead();
+        void deleteTail();
+        void deleteAt(int);
+
+        // Update
+        void UpdateAt(int, Book &);
+
         // show
         void show();
 };
@@ -140,6 +148,64 @@ void Store::addAt(int index, Book &newBook) {
     };
     *(this->p + index) = newBook;
     this->_length++;
+}
+
+// delete
+void Store::deleteTail() {
+    if(this->_length == 0) {
+        return;
+    }
+    else {
+        Book *temp = new Book[this->_length];
+        for (int i = 0; i < this->_length; i++)
+            *(temp + i) = *(this->p + i);
+        delete[] this->p;
+        this->p = new Book[this->_length - 1];
+        for (int i = 0; i < this->_length - 1; i++) {
+            *(this->p + i) = *(temp + i);
+        }
+   }
+   this->_length--;
+}
+void Store::deleteHead() {
+    if(this->_length == 0) {
+        return;
+    }
+    else {
+        Book *temp = new Book[this->_length];
+        for (int i = 0; i < this->_length; i++)
+            *(temp + i) = *(this->p + i);
+        delete[] this->p;
+        this->p = new Book[this->_length - 1];
+        for (int i = 0; i < this->_length - 1; i++) {
+            *(this->p + i) = *(temp + i + 1);
+        }
+   }
+   this->_length--;
+}
+void Store::deleteAt(int index) {
+    if(this->_length == 0) {
+        return;
+    }
+    else {
+        Book *temp = new Book[this->_length];
+        for (int i = 0; i < this->_length; i++)
+            *(temp + i) = *(this->p + i);
+        delete[] this->p;
+        this->p = new Book[this->_length - 1];
+        for (int i = 0; i < this->_length; i++) {
+            if(i < index)
+                *(this->p + i) = *(temp + i);
+            else if(i > index)
+                *(this->p + i - 1) = *(temp + i);
+        }
+   }
+   this->_length--;
+}
+
+// update
+void Store::UpdateAt(int index, Book &b) {
+    *(this->p + index) = b;
 }
 
 // show

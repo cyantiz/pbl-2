@@ -6,7 +6,7 @@
 using namespace std;
 
 void setUnicode();
-wstring setColor();
+wstring setColor(int, int);
 void clrscr();
 void pause();
 
