@@ -1,7 +1,10 @@
 #pragma once
+#include <iostream>
 #include <Windows.h>
 #include <fcntl.h> //_O_WTEXT
 #include <io.h>    //_setmode()
+#include <locale> 
+#include <codecvt> 
 
 using namespace std;
 
@@ -9,6 +12,8 @@ void setUnicode();
 wstring setColor(int, int);
 void clrscr();
 void pause();
+wstring utf8_to_utf16(const string &);
+string utf16_to_utf8(const wstring &);
 
 /******************************************************/
 
@@ -38,4 +43,21 @@ void clrscr() {
 void pause() {
     wcout << setColor(0,10) << L"Nhấn phím bất kỳ để tiếp tục..." << endl << setColor(0,15);
     system("pause > nul");
+}
+
+// string (utf8) -> u16string -> wstring
+wstring utf8_to_utf16(const string& utf8)
+{
+    wstring_convert<codecvt_utf8_utf16<char16_t>,char16_t> convert; 
+    u16string utf16 = convert.from_bytes(utf8);
+    wstring wstr(utf16.begin(), utf16.end());
+    return wstr;
+}
+
+// wstring -> u16string -> string (utf8)
+string utf16_to_utf8(const wstring& utf16) {
+    u16string u16str(utf16.begin(), utf16.end());
+    wstring_convert<codecvt_utf8_utf16<char16_t>,char16_t> convert; 
+    string utf8 = convert.to_bytes(u16str);
+    return utf8;
 }

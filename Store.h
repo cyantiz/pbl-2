@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include "format.cpp"
+#include "format.h"
 #include "Book.h"
 
 class Store {
@@ -13,7 +13,7 @@ class Store {
     public:
         // constructors, destructors
         Store();
-        Store(Store &);
+        Store(Store&);
         ~Store();
 
         // geters, setters
@@ -38,6 +38,7 @@ class Store {
         void deleteHead();
         void deleteTail();
         void deleteAt(int);
+        void deleteAll();
 
         // Update
         void UpdateAt(int, Book &);
@@ -202,6 +203,11 @@ void Store::deleteAt(int index) {
    }
    this->_length--;
 }
+void Store::deleteAll() {
+    delete[] this->p;
+    this->_length = 0;
+}
+
 
 // update
 void Store::UpdateAt(int index, Book &b) {
@@ -215,4 +221,5 @@ void Store::show() {
         (this->p + i)->show();
     }
     wcout << L"===================END LIST=====================" << endl;
+    wcout << L"Danh sách này có " << this->_length << L" đầu sách" << endl;
 }

@@ -1,0 +1,21 @@
+3
+00000001
+The Old Man and the Sea
+Ernest Hemingway
+Tiểu thuyết
+20
+10
+1
+00000002
+化物語
+西尾維新
+Tiểu Thuyết
+10
+100
+70
+00000010
+A Brief History of Time
+Stephen Hawking
+5
+1000
+999

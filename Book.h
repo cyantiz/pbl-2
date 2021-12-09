@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include "format.cpp"
+#include "format.h"
 
 using namespace std;
 class Book {
@@ -11,8 +11,8 @@ class Book {
         wstring author;
         wstring category;
         double price; //dollars
-        int sold;
         int stock;
+        int sold;
     public:
         // constructor
         Book(wstring = L"XXXXXXXX", wstring = L"null_name", wstring = L"null_author", wstring = L"null_category", double = 0.0, int = 0, int = 0);
@@ -29,10 +29,10 @@ class Book {
         void setCategory(wstring);
         double getPrice();
         void setPrice(double);
-        int getSold();
-        void setSold(int);
         int getStock();
         void setStock(int);
+        int getSold();
+        void setSold(int);
 
         // show
         void show();
@@ -64,7 +64,7 @@ void Book::setAuthor(wstring author) {
     this->author = author;
 }
 wstring Book::getCategory() {
-    return this->author;
+    return this->category;
 }
 void Book::setCategory(wstring category) {
     this->category = category;
@@ -75,17 +75,17 @@ double Book::getPrice() {
 void Book::setPrice(double price) {
     this->price = price;
 }
-int Book::getSold() {
-    return this->sold;
-}
-void Book::setSold(int sold) {
-    this->sold = sold;
-}
 int Book::getStock() {
     return this->stock;
 }
 void Book::setStock(int stock) {
     this->stock = stock;
+}
+int Book::getSold() {
+    return this->sold;
+}
+void Book::setSold(int sold) {
+    this->sold = sold;
 }
 
 // show
