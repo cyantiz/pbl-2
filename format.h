@@ -41,7 +41,7 @@ void clrscr() {
 }
 
 void pause() {
-    wcout << setColor(0,10) << L"Nhấn phím bất kỳ để tiếp tục..." << endl << setColor(0,15);
+    wcout << endl << setColor(0,10) << L"Nhấn phím bất kỳ để tiếp tục..." << endl << setColor(0,15);
     system("pause > nul");
 }
 

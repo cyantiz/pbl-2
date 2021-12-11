@@ -2,14 +2,15 @@
 #include <math.h>
 #include <string>
 #include "format.h"
-#include "Store.h"
+#include "BookStore.h"
 
 using namespace std;
 
-Store db;
+BookStore db;
 
 void printMenu();
 wstring intIDtoWstring(int); // int->wstring id with 8 characters: 1 -> L"00000001", 69 -> L"00000069"
+int wstringIDtoInt(wstring);
 Book &inputNewBook(wstring);
 void importDataFromFile(wstring &);
 void exportDataToFile(wstring &);
@@ -18,11 +19,17 @@ int main() {
     // initial console setup
     setColor(0, 15);
     setUnicode();
+    int nextID = 1;
 
     // initial assignment
-    int nextID = 1;
+    
     int menuSelection = -1;
 
+    /*
+    TODO:
+        WHILE LOOP: (until menuSelection = 0 which mean exit)
+            Print menu -> Select (VALIDATED) -> Do selection 
+    */
     // ==> go  
     while(menuSelection != 0) {
         menuSelection = -1;
@@ -34,11 +41,11 @@ int main() {
             wcout << L">> Lựa chọn của bạn: ";
             wcin >> menuSelection;
         } while (menuSelection < 0 || menuSelection > 7);
-
+        clrscr();
         // 1. print list
         if(menuSelection == 1) {
             if(db.getLength() == 0)
-                wcout << L"Danh sách rỗng!" << endl; 
+                wcout << setColor(0,12) << L"Danh sách rỗng!" << setColor(0,15) << endl; 
             else 
                 db.show();
         }
@@ -46,7 +53,8 @@ int main() {
         // 2. show specific book info by ID
         if(menuSelection == 2) {
             wstring id;
-            wcout << L"Nhập ID sách: ";
+            wcout << setColor(0, 10) << L"Xem thông tin sách" << setColor(0, 15) << endl
+                  << L">> Nhập ID sách: ";
             wcin >> id;
 
             int index = db.getBookIndexByID(id);
@@ -59,10 +67,13 @@ int main() {
             }
         }   
 
-        // 3. add book by ID
+        // 3. add book (new book id = nextID)
         if(menuSelection == 3) {
             wstring id = intIDtoWstring(nextID);
-            wcout << L"Nhập thông tin sách mới: " << endl;
+            wcout << setColor(0, 15) << L"THÊM ĐẦU SÁCH MỚI VÀO DANH SÁCH" << endl
+                  << setColor(0, 10) << L"Đầu sách này sẽ có ID "
+                  << setColor(0, 14) << id << endl
+                  << setColor(0, 10) << L"Nhập thông tin sách mới: " << setColor(0,15) << endl;
             Book newBook = inputNewBook(id);
             db.addTail(newBook);
             wcout << setColor(0, 10) << L"Thêm thành công sách với ID "
@@ -110,11 +121,26 @@ int main() {
 
         // 6. import data from file
         if(menuSelection == 6) {
+
             wstring fileName;
             wcout << L">> Nhập tên file: ";
             cin.ignore();
             wcin >> fileName;
             importDataFromFile(fileName);
+
+            /* set nextID
+            TODO:
+                Find the highest ID (max)
+                Plus it to 1 and assign it to nextID
+            */
+            int max = -1;
+            for (int i = 0; i < db.getLength(); i++) {
+                int id = stoi(db.getBook(i).getID());
+                if(id > max) {
+                    max = id;
+                }
+            }
+            nextID = max + 1;
         }
         
         // 7. export data to file
@@ -135,16 +161,20 @@ int main() {
 }
 
 
+/**********************************************************************************/
+
 void printMenu() {
     wcout << L"+--------------------------------------------------+" << endl
           << L"|                                                  |" << endl
-          << L"|       CHƯƠNG TRÌNH QUẢN LÝ CỬA HÀNG SÁCH         |" << endl
+          << L"|            "
+          << setColor(0, 14) << L"QUẢN LÍ SÁCH TRONG CỬA HÀNG"
+          << setColor(0, 15) << L"           |"                      << endl
           << L"|                                                  |" << endl
           << L"|            0. Thoát                              |" << endl
-          << L"|            1. In danh sách sách                  |" << endl
+          << L"|            1. In danh sách các đầu sách          |" << endl
           << L"|            2. Xem thông tin sách                 |" << endl
-          << L"|            3. Thêm sách                          |" << endl
-          << L"|            4. Xóa sách                           |" << endl
+          << L"|            3. Thêm đầu sách                      |" << endl
+          << L"|            4. Xóa đầu sách                       |" << endl
           << L"|            5. Cập nhật sách                      |" << endl
           << L"|            6. Nhập danh sách từ file             |" << endl
           << L"|            7. Xuất danh sách ra file             |" << endl
@@ -153,6 +183,10 @@ void printMenu() {
 }
 
 wstring intIDtoWstring(int id) {
+    /*
+        TODO: convert int id => wstring
+              add "0" until id length = 8
+    */
     wstring strID = to_wstring(id);
     while(strID.length() < 8) {
         strID = L"0" + strID;
@@ -161,6 +195,14 @@ wstring intIDtoWstring(int id) {
 }
 
 void importDataFromFile(wstring& fileName) {
+    /*
+     * It impossible to import data from a utf-16 encoding .txt file, but this program store text data as utf-16 wstring,
+     * So data is saved in utf-8 encoding .txt file    
+     TODO:
+        ==> Open utf-8 file
+        ==> import data to a utf-8 string
+        ==> convert string to wstring using utf8_to_utf16 function (in format.h)
+    */
     ifstream fin(fileName.c_str());
     try {
         if( fin.is_open() ) {
@@ -203,6 +245,12 @@ void importDataFromFile(wstring& fileName) {
 }
 
 void exportDataToFile(wstring& fileName) {
+    /* 
+     TODO:
+        ==> Open file (utf8)
+        ==> Convert utf16 wstring to utf8 string (using utf16_to_utf8 in format.h) 
+        ==> export data as utf8 string
+    */
     ofstream fout(fileName.c_str());
     try {
         if( fout.is_open() ) {
@@ -233,7 +281,12 @@ void exportDataToFile(wstring& fileName) {
 }
 
 Book& inputNewBook(wstring id) {
-    // initial
+    /*
+    TODO:
+        input all information of a book
+        Create a book object with input information --> return that object;
+    */
+
     wstring name;
     wstring author;
     wstring category;
