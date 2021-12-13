@@ -6,8 +6,6 @@
 
 using namespace std;
 
-BookStore db;
-
 void printMenu();
 wstring intIDtoWstring(int); // int->wstring id with 8 characters: 1 -> L"00000001", 69 -> L"00000069"
 int wstringIDtoInt(wstring);
@@ -17,9 +15,10 @@ void exportDataToFile(wstring &);
 
 int main() {
     // initial console setup
-    setColor(0, 15);
-    setUnicode();
+    SetColor(0, 15);
+    SetUnicode();
     int nextID = 1;
+    BookStore *db = BookStore::GetInstance();
 
     // initial assignment
     
@@ -30,7 +29,7 @@ int main() {
         WHILE LOOP: (until menuSelection = 0 which mean exit)
             Print menu -> Select (VALIDATED) -> Do selection 
     */
-    // ==> go  
+    // ==> go   
     while(menuSelection != 0) {
         menuSelection = -1;
         
@@ -44,40 +43,40 @@ int main() {
         clrscr();
         // 1. print list
         if(menuSelection == 1) {
-            if(db.getLength() == 0)
-                wcout << setColor(0,12) << L"Danh sách rỗng!" << setColor(0,15) << endl; 
+            if(db->GetLength() == 0)
+                wcout << SetColor(0,12) << L"Danh sách rỗng!" << SetColor(0,15) << endl; 
             else 
-                db.show();
+                db->show();
         }
 
         // 2. show specific book info by ID
         if(menuSelection == 2) {
             wstring id;
-            wcout << setColor(0, 10) << L"Xem thông tin sách" << setColor(0, 15) << endl
+            wcout << SetColor(0, 10) << L"Xem thông tin sách" << SetColor(0, 15) << endl
                   << L">> Nhập ID sách: ";
             wcin >> id;
 
-            int index = db.getBookIndexByID(id);
+            int index = db->GetBookIndexByID(id);
             if(index == -1) {
-                wcout << setColor(0, 12) << L"Không tìm thấy sách có ID "
-                      << setColor(0, 14) << id << setColor(0, 15) << endl;
+                wcout << SetColor(0, 12) << L"Không tìm thấy sách có ID "
+                      << SetColor(0, 14) << id << SetColor(0, 15) << endl;
             }
             else {
-                db.getBook(index).show();
+                db->GetBook(index)->show();
             }
         }   
 
         // 3. add book (new book id = nextID)
         if(menuSelection == 3) {
             wstring id = intIDtoWstring(nextID);
-            wcout << setColor(0, 15) << L"THÊM ĐẦU SÁCH MỚI VÀO DANH SÁCH" << endl
-                  << setColor(0, 10) << L"Đầu sách này sẽ có ID "
-                  << setColor(0, 14) << id << endl
-                  << setColor(0, 10) << L"Nhập thông tin sách mới: " << setColor(0,15) << endl;
+            wcout << SetColor(0, 15) << L"THÊM ĐẦU SÁCH MỚI VÀO DANH SÁCH" << endl
+                  << SetColor(0, 10) << L"Đầu sách này sẽ có ID "
+                  << SetColor(0, 14) << id << endl
+                  << SetColor(0, 10) << L"Nhập thông tin sách mới: " << SetColor(0,15) << endl;
             Book newBook = inputNewBook(id);
-            db.addTail(newBook);
-            wcout << setColor(0, 10) << L"Thêm thành công sách với ID "
-                  << setColor(0, 14) << id << setColor(0, 15) << endl;
+            db->addTail(newBook);
+            wcout << SetColor(0, 10) << L"Thêm thành công sách với ID "
+                  << SetColor(0, 14) << id << SetColor(0, 15) << endl;
             nextID++;   
         }
 
@@ -87,15 +86,15 @@ int main() {
             wcout << L"Nhập ID sách: ";
             wcin >> id;
 
-            int index = db.getBookIndexByID(id);
+            int index = db->GetBookIndexByID(id);
             if(index == -1) {
-                wcout << setColor(0, 12) << L"Không tìm thấy sách có ID "
-                      << setColor(0, 14) << id << setColor(0, 15) << endl;
+                wcout << SetColor(0, 12) << L"Không tìm thấy sách có ID "
+                      << SetColor(0, 14) << id << SetColor(0, 15) << endl;
             }
             else {
-                db.deleteAt(index);
-                wcout << setColor(0, 10) << L"Xóa thành công sách có ID "
-                      << setColor(0, 14) << id << setColor(0, 15) << endl;
+                db->deleteAt(index);
+                wcout << SetColor(0, 10) << L"Xóa thành công sách có ID "
+                      << SetColor(0, 14) << id << SetColor(0, 15) << endl;
             }
         }
 
@@ -105,17 +104,17 @@ int main() {
             wcout << L"Nhập ID sách: ";
             wcin >> id;
 
-            int index = db.getBookIndexByID(id);
+            int index = db->GetBookIndexByID(id);
             if(index == -1) {
-                wcout << setColor(0, 12) << L"Không tìm thấy sách có ID "
-                      << setColor(0, 14) << id << setColor(0, 15) << endl;
+                wcout << SetColor(0, 12) << L"Không tìm thấy sách có ID "
+                      << SetColor(0, 14) << id << SetColor(0, 15) << endl;
             }
             else {
                 wcout << L"Cập nhật thông tin sách: " << endl;
                 Book newBook = inputNewBook(id);
-                db.UpdateAt(index, newBook);
-                wcout << setColor(0, 10) << L"Cập nhật thành công sách có ID "
-                      << setColor(0, 14) << id << setColor(0, 15) << endl;
+                db->UpdateAt(index, newBook);
+                wcout << SetColor(0, 10) << L"Cập nhật thành công sách có ID "
+                      << SetColor(0, 14) << id << SetColor(0, 15) << endl;
             }
         }
 
@@ -134,8 +133,8 @@ int main() {
                 Plus it to 1 and assign it to nextID
             */
             int max = -1;
-            for (int i = 0; i < db.getLength(); i++) {
-                int id = stoi(db.getBook(i).getID());
+            for (int i = 0; i < db->GetLength(); i++) {
+                int id = stoi(db->GetBook(i)->GetID());
                 if(id > max) {
                     max = id;
                 }
@@ -156,7 +155,7 @@ int main() {
             pause();
     }
 
-    setColor(0, 7); //default console color
+    SetColor(0, 7); //default console color
     return 0;
 }
 
@@ -167,8 +166,8 @@ void printMenu() {
     wcout << L"+--------------------------------------------------+" << endl
           << L"|                                                  |" << endl
           << L"|            "
-          << setColor(0, 14) << L"QUẢN LÍ SÁCH TRONG CỬA HÀNG"
-          << setColor(0, 15) << L"           |"                      << endl
+          << SetColor(0, 14) << L"QUẢN LÍ SÁCH TRONG CỬA HÀNG"
+          << SetColor(0, 15) << L"           |"                      << endl
           << L"|                                                  |" << endl
           << L"|            0. Thoát                              |" << endl
           << L"|            1. In danh sách các đầu sách          |" << endl
@@ -203,11 +202,12 @@ void importDataFromFile(wstring& fileName) {
         ==> import data to a utf-8 string
         ==> convert string to wstring using utf8_to_utf16 function (in format.h)
     */
+    BookStore *db = BookStore::GetInstance();
     ifstream fin(fileName.c_str());
     try {
         if( fin.is_open() ) {
             // delete all data in order to import new one :)
-            db.deleteAll();
+            db->deleteAll();
             
             // input length
             int length;
@@ -230,17 +230,17 @@ void importDataFromFile(wstring& fileName) {
                 wstring wcategory = utf8_to_utf16(category);
                 fin >> price >> sold >> stock;
                 Book newBook(wid, wname, wauthor, wcategory, price, sold, stock);
-                db.addTail(newBook);
+                db->addTail(newBook);
             }
             fin.close();
             wcout << L"Nhập dữ liệu thành công!" << endl;
         }
         else {
-            wcout << setColor(0,12) << L"Mở file thất bại!" << setColor(0,15) << endl;
+            wcout << SetColor(0,12) << L"Mở file thất bại!" << SetColor(0,15) << endl;
         }
     }
     catch(...) {
-        wcout << setColor(0,12) << L"Nhập dữ liệu thất bại!" << setColor(0,15) << endl;
+        wcout << SetColor(0,12) << L"Nhập dữ liệu thất bại!" << SetColor(0,15) << endl;
     }
 }
 
@@ -251,32 +251,33 @@ void exportDataToFile(wstring& fileName) {
         ==> Convert utf16 wstring to utf8 string (using utf16_to_utf8 in format.h) 
         ==> export data as utf8 string
     */
+    BookStore *db = BookStore::GetInstance();
     ofstream fout(fileName.c_str());
     try {
         if( fout.is_open() ) {
-            fout << db.getLength() << endl;
-            for (int i = 0; i < db.getLength(); i++) {
-                string id = utf16_to_utf8(db.getBook(i).getID());
-                string name = utf16_to_utf8(db.getBook(i).getName());
-                string author = utf16_to_utf8(db.getBook(i).getAuthor());
-                string category = utf16_to_utf8(db.getBook(i).getCategory());
+            fout << db->GetLength() << endl;
+            for (int i = 0; i < db->GetLength(); i++) {
+                string id = utf16_to_utf8(db->GetBook(i)->GetID());
+                string name = utf16_to_utf8(db->GetBook(i)->GetName());
+                string author = utf16_to_utf8(db->GetBook(i)->GetAuthor());
+                string category = utf16_to_utf8(db->GetBook(i)->GetCategory());
                 fout << id << endl
                      << name << endl
                      << author << endl
                      << category << endl
-                     << db.getBook(i).getPrice() << endl
-                     << db.getBook(i).getStock() << endl
-                     << db.getBook(i).getSold() << endl;
+                     << db->GetBook(i)->GetPrice() << endl
+                     << db->GetBook(i)->GetStock() << endl
+                     << db->GetBook(i)->GetSold() << endl;
             }
             fout.close();
-            wcout << setColor(0,10) << L"Xuất dữ liệu thành công!" << setColor(0,15) << endl;
+            wcout << SetColor(0,10) << L"Xuất dữ liệu thành công!" << SetColor(0,15) << endl;
         }
         else {
-            wcout << setColor(0,12) << L"Xuất dữ liệu thất bại!" << setColor(0,15) << endl;
+            wcout << SetColor(0,12) << L"Xuất dữ liệu thất bại!" << SetColor(0,15) << endl;
         }
     }
     catch(...) {
-        wcout << setColor(0,12) << L"Xuất dữ liệu thất bại!" << setColor(0,15) << endl;
+        wcout << SetColor(0,12) << L"Xuất dữ liệu thất bại!" << SetColor(0,15) << endl;
     }
 }
 

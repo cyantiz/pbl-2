@@ -8,8 +8,8 @@
 
 using namespace std;
 
-void setUnicode();
-wstring setColor(int, int);
+void SetUnicode();
+wstring SetColor(int, int);
 void clrscr();
 void pause();
 wstring utf8_to_utf16(const string &);
@@ -17,12 +17,12 @@ string utf16_to_utf8(const wstring &);
 
 /******************************************************/
 
-void setUnicode() {
+void SetUnicode() {
     _setmode(_fileno(stdout), _O_WTEXT); //needed for output
     _setmode(_fileno(stdin), _O_WTEXT); //needed for input
 }
 
-wstring setColor(int background_color, int text_color)
+wstring SetColor(int background_color, int text_color)
 {
     HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     int color_code = background_color * 16 + text_color;
@@ -41,7 +41,7 @@ void clrscr() {
 }
 
 void pause() {
-    wcout << endl << setColor(0,10) << L"Nhấn phím bất kỳ để tiếp tục..." << endl << setColor(0,15);
+    wcout << endl << SetColor(0,10) << L"Nhấn phím bất kỳ để tiếp tục..." << endl << SetColor(0,15);
     system("pause > nul");
 }
 

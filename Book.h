@@ -18,21 +18,21 @@ class Book {
         Book(wstring = L"XXXXXXXX", wstring = L"null_name", wstring = L"null_author", wstring = L"null_category", double = 0.0, int = 0, int = 0);
         ~Book();
 
-        // getter, setter
-        wstring getID();
-        void setID(wstring);
-        wstring getName();
-        void setName(wstring);
-        wstring getAuthor();
-        void setAuthor(wstring);
-        wstring getCategory();
-        void setCategory(wstring);
-        double getPrice();
-        void setPrice(double);
-        int getStock();
-        void setStock(int);
-        int getSold();
-        void setSold(int);
+        // Getter, Setter
+        wstring GetID();
+        void SetID(wstring);
+        wstring GetName();
+        void SetName(wstring);
+        wstring GetAuthor();
+        void SetAuthor(wstring);
+        wstring GetCategory();
+        void SetCategory(wstring);
+        double GetPrice();
+        void SetPrice(double);
+        int GetStock();
+        void SetStock(int);
+        int GetSold();
+        void SetSold(int);
 
         // show
         void show();
@@ -44,53 +44,53 @@ Book::Book(wstring id, wstring name, wstring author, wstring category, double pr
 }
 Book::~Book() { }
 
-// getter, setter
-wstring Book::getID() {
+// Getter, Setter
+wstring Book::GetID() {
     return this->id;
 }
-void Book::setID(wstring id) {
+void Book::SetID(wstring id) {
     this->id = id;
 }
-wstring Book::getName() {
+wstring Book::GetName() {
     return this->name;
 }
-void Book::setName(wstring name) {
+void Book::SetName(wstring name) {
     this->name = name;
 }
-wstring Book::getAuthor() {
+wstring Book::GetAuthor() {
     return this->author;
 }
-void Book::setAuthor(wstring author) {
+void Book::SetAuthor(wstring author) {
     this->author = author;
 }
-wstring Book::getCategory() {
+wstring Book::GetCategory() {
     return this->category;
 }
-void Book::setCategory(wstring category) {
+void Book::SetCategory(wstring category) {
     this->category = category;
 }
-double Book::getPrice() {
+double Book::GetPrice() {
     return this->price;
 }
-void Book::setPrice(double price) {
+void Book::SetPrice(double price) {
     this->price = price;
 }
-int Book::getStock() {
+int Book::GetStock() {
     return this->stock;
 }
-void Book::setStock(int stock) {
+void Book::SetStock(int stock) {
     this->stock = stock;
 }
-int Book::getSold() {
+int Book::GetSold() {
     return this->sold;
 }
-void Book::setSold(int sold) {
+void Book::SetSold(int sold) {
     this->sold = sold;
 }
 
 // show
 void Book::show() {  
-    wcout << setColor(0, 14) <<  L"#" << this->id << L"  " << setColor(0, 15);
+    wcout << SetColor(0, 14) <<  L"#" << this->id << L"  " << SetColor(0, 15);
     wcout << L"Tên:        " << this->name << endl
             << L"           Tác giả:    " << this->author << endl
             << L"           Thể loại:   " << this->category << endl

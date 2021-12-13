@@ -4,26 +4,37 @@
 #include "format.h"
 #include "Book.h"
 
+// singleton
 class BookStore {
     private:
         Book *p;
         int _length;
-    public:
-        // constructors, destructors
+
+        // constructors
         BookStore();
         BookStore(BookStore&);
+
+        // singleton instance
+        static BookStore* uniqueInstance;
+
+    public:
+        // Get singleton instance
+        static BookStore *GetInstance();
+        
+        // destructor
         ~BookStore();
 
-        // geters, setters
-        int getLength();
-        void setLength(int);
-        long long getTotalSold();
-        long long getTotalStock();
-        Book getBook(int);
-        // void setBook(int);
+
+        // Geters, Setters
+        int GetLength();
+        void SetLength(int);
+        long long GetTotalSold();
+        long long GetTotalStock();
+        Book* GetBook(int);
+        // void SetBook(int);
         
         // search
-        int getBookIndexByID(wstring);
+        int GetBookIndexByID(wstring);
 
         // Add
         void addTail(Book &);
@@ -41,52 +52,60 @@ class BookStore {
 
         // show
         void show();
-
-        
 };
 
 // constructors, destructors
 BookStore::BookStore() : p(nullptr), _length(0) {
 }
-BookStore::BookStore(BookStore& s): _length(s.getLength()){
+BookStore::BookStore(BookStore& s): _length(s.GetLength()){
     this->p = new Book[this->_length];
     for (int i = 0; i < this->_length; i++) {
-        *(this->p + i) = s.getBook(i);
+        *(this->p + i) = *s.GetBook(i);
     }
 }
 BookStore::~BookStore() {
     delete[] this->p;
 }
 
-// getters, setters
-int BookStore::getLength() {
+// Singleton
+BookStore *BookStore::uniqueInstance = nullptr;
+BookStore* BookStore::GetInstance() {
+    if(uniqueInstance == nullptr) {
+        uniqueInstance = new BookStore();
+    }
+    return uniqueInstance;
+}
+
+
+// Getters, Setters
+int BookStore::GetLength() {
     return this->_length;
 }
-void BookStore::setLength(int length) {
+void BookStore::SetLength(int length) {
     this->_length = length;
 }
-long long BookStore::getTotalSold() {
+long long BookStore::GetTotalSold() {
     long long totalSold = 0;
     for (int i = 0; i < this->_length; i++) {
-        totalSold += (this->p + i)->getSold();
+        totalSold += (this->p + i)->GetSold();
     }
     return totalSold;
 }
-long long BookStore::getTotalStock() {
+long long BookStore::GetTotalStock() {
     long long totalStock = 0;
     for (int i = 0; i < this->_length; i++) {
-        totalStock += (this->p + i)->getStock();
+        totalStock += (this->p + i)->GetStock();
     }
     return totalStock;
 }
-Book BookStore::getBook(int index) {
-    return *(this->p + index);
+Book* BookStore::GetBook(int index) {
+    return this->p + index;
 }
 
 // search
-int BookStore::getBookIndexByID(wstring id) {
+int BookStore::GetBookIndexByID(wstring id) {
     for (int i = 0; i < this->_length; i++) {
-        if( (this->p + i)->getID() == id)
+        if( (this->p + i)->GetID() == id)
             return i;
     }
     return -1;
@@ -221,9 +240,9 @@ void BookStore::show() {
         (this->p + i)->show();
     }
     wcout << L"===================END LIST=====================" << endl;
-    wcout << L"Danh sách này có " << setColor(0, 14) << this->_length << setColor(0, 15) << L" đầu sách" << endl;
+    wcout << L"Danh sách này có " << SetColor(0, 14) << this->_length << SetColor(0, 15) << L" đầu sách" << endl;
     wcout << L"Tổng số cuốn sách còn trong kho: "
-          <<  setColor(0, 14) << this->getTotalStock() << setColor(0, 15) << endl;
+          <<  SetColor(0, 14) << this->GetTotalStock() << SetColor(0, 15) << endl;
     wcout << L"Tổng số cuốn sách đã bán: "
-          << setColor(0, 14) << this->getTotalSold() <<  setColor(0, 15) << endl;
+          << SetColor(0, 14) << this->GetTotalSold() <<  SetColor(0, 15) << endl;
 }
