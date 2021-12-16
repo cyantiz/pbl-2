@@ -2,7 +2,6 @@
 #include <string>
 #include "format.cpp"
 #include "BookStore.h"
-#include <stack>
 
 using namespace std;
 
