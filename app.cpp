@@ -21,7 +21,6 @@ int main() {
     BookStore *db = BookStore::GetInstance();
 
     /*  
-    TODO:
         -> WHILE LOOP: (until menuSelection = 0 which mean exit)
             Print menu -> Select (VALIDATED) -> Do the selected function
     */
@@ -41,7 +40,7 @@ int main() {
         
         // 1. print list
         if(menuSelection == 1) {
-            /* TODO:
+            /*
                 + If there is no book -> print message
                 + else Print all books in store
             */
@@ -53,7 +52,7 @@ int main() {
 
         // 2. sort list
         if(menuSelection == 2) {
-            /* TODO:
+            /*
                 -> Selection: choose what property to sort by 
                 -> Sort
             */
@@ -81,7 +80,7 @@ int main() {
 
         // 3. show specific book info by ID
         if(menuSelection == 3) {
-            /* TODO:
+            /*
                 + Choose what property of book to search by (id, name,...)
                 + Search
             */
@@ -151,7 +150,7 @@ int main() {
 
         // 4. add book (new book id = nextID)
         if(menuSelection == 4) {
-            /* TODO:
+            /* 
                 -> Choose where to add book
                 -> Input new book infor
                 -> Add it
@@ -207,7 +206,7 @@ int main() {
 
         // 5. delete book by ID
         if(menuSelection == 5) {
-            /* TODO:
+            /* 
                 Selection
                     -> Delete specific book by id
                         + Input ID
@@ -257,7 +256,7 @@ int main() {
 
         // 6. update book info by ID
         if(menuSelection == 6) {
-            /* TODO:
+            /* 
                 -> Input book id;
                 -> + If book not found -> Print message
                    + If book found -> Input new info -> Update 
@@ -283,7 +282,7 @@ int main() {
 
         // 7. import data from file
         if(menuSelection == 7) {
-            /* TODO:
+            /* 
                 -> Input name of data file;
                 (if file name = -1 -> back to menu)
                 -> Import
@@ -303,7 +302,7 @@ int main() {
         
         // 8. export data to file
         if(menuSelection == 8) {
-            /* TODO:
+            /* 
                 -> Input name of export file;
                 -> Export
             */
@@ -351,7 +350,6 @@ void importDataFromFile(wstring& fileName) {
     /*
      * It impossible to import data from a utf-16 encoding .txt file, but this program store text data as utf-16 wstring,
      * So data is saved in utf-8 encoding .txt file    
-     TODO:
         ==> Open utf-8 file
         ==> import data to a utf-8 string
         ==> convert string to wstring using utf8_to_utf16 function (in format.h)
@@ -400,7 +398,6 @@ void importDataFromFile(wstring& fileName) {
 
 void exportDataToFile(wstring& fileName) {
     /* 
-     TODO:
         ==> Open file (utf8)
         ==> Convert utf16 wstring to utf8 string (using utf16_to_utf8 in format.h) 
         ==> export data as utf8 string
@@ -437,7 +434,6 @@ void exportDataToFile(wstring& fileName) {
 
 Book& inputNewBook(wstring id) {
     /*
-    TODO:
         input all information of a book
         Create a book object with input information --> return that object;
     */
