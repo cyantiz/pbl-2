@@ -1,3 +1,7 @@
 # pbl-2
 
-## Nothing yet, we will finish this project at the last day of deadline, easy peasy
+## Main menu
+<img src=".preview/preview1.png">
+
+## Show all books' info
+<img src=".preview/preview2.png">
