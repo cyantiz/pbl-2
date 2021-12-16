@@ -1,107 +1,270 @@
 #include <fstream>
-#include <math.h>
 #include <string>
-#include "format.h"
+#include "format.cpp"
 #include "BookStore.h"
+#include <stack>
 
 using namespace std;
 
 void printMenu();
-wstring intIDtoWstring(int); // int->wstring id with 8 characters: 1 -> L"00000001", 69 -> L"00000069"
-int wstringIDtoInt(wstring);
-Book &inputNewBook(wstring);
 void importDataFromFile(wstring &);
 void exportDataToFile(wstring &);
+Book &inputNewBook(wstring);
 
 int main() {
     // initial console setup
     SetColor(0, 15);
     SetUnicode();
-    int nextID = 1;
-    BookStore *db = BookStore::GetInstance();
 
     // initial assignment
-    
     int menuSelection = -1;
+    BookStore *db = BookStore::GetInstance();
 
-    /*
+    /*  
     TODO:
-        WHILE LOOP: (until menuSelection = 0 which mean exit)
-            Print menu -> Select (VALIDATED) -> Do selection 
+        -> WHILE LOOP: (until menuSelection = 0 which mean exit)
+            Print menu -> Select (VALIDATED) -> Do the selected function
     */
-    // ==> go   
+    // ==> go
     while(menuSelection != 0) {
         menuSelection = -1;
         
-        // menu
+        // menu and select
         do {
             clrscr();
             printMenu();
-            wcout << L">> Lựa chọn của bạn: ";
+            wcout << L">> Lựa chọn chức năng: ";
             wcin >> menuSelection;
-        } while (menuSelection < 0 || menuSelection > 7);
+        } while (menuSelection < 0 || menuSelection > 8);
+        
         clrscr();
+        
         // 1. print list
         if(menuSelection == 1) {
+            /* TODO:
+                + If there is no book -> print message
+                + else Print all books in store
+            */
             if(db->GetLength() == 0)
                 wcout << SetColor(0,12) << L"Danh sách rỗng!" << SetColor(0,15) << endl; 
             else 
-                db->show();
+                db->ShowAll();
         }
 
-        // 2. show specific book info by ID
+        // 2. sort list
         if(menuSelection == 2) {
-            wstring id;
-            wcout << SetColor(0, 10) << L"Xem thông tin sách" << SetColor(0, 15) << endl
-                  << L">> Nhập ID sách: ";
-            wcin >> id;
+            /* TODO:
+                -> Selection: choose what property to sort by 
+                -> Sort
+            */
+            int sortSelection = -1;
+            do {
+                clrscr();
+                wcout << SetColor(0, 14) << L"SẮP XẾP DANH SÁCH CÁC ĐẦU SÁCH" << SetColor(0, 15) << endl << endl
+                      << SetColor(0, 12)
+                      << L"\t0. Trở lại menu" << SetColor(0, 15) << endl
+                      << L"\t1. Sắp xếp theo ID" << endl
+                      << L"\t2. Sắp xếp theo Tên" << endl
+                      << L"\t3. Sắp xếp theo Tác giả" << endl
+                      << L"\t4. Sắp xếp theo Thể loại" << endl
+                      << L"\t5. Sắp xếp theo Giá" << endl
+                      << L"\t6. Sắp xếp theo số lượng trong kho" << endl
+                      << L"\t7. Sắp xếp theo số lượng đã bán" << endl << endl
+                      << L">> Nhập lựa chọn: ";
+                wcin >> sortSelection;
+            } while (sortSelection < 0 || sortSelection > 7);
+            if(sortSelection == 0)
+                goto BackToMenu;
+            db->Sort(sortSelection);
+            wcout << SetColor(0,10) << L"Sắp xếp danh sách thành công!" << SetColor(0,15) << endl; 
+        }
 
-            int index = db->GetBookIndexByID(id);
-            if(index == -1) {
-                wcout << SetColor(0, 12) << L"Không tìm thấy sách có ID "
-                      << SetColor(0, 14) << id << SetColor(0, 15) << endl;
+        // 3. show specific book info by ID
+        if(menuSelection == 3) {
+            /* TODO:
+                + Choose what property of book to search by (id, name,...)
+                + Search
+            */
+            int searchSelection = -1;
+            do {
+                wcout << SetColor(0, 14) << L"TÌM ĐẦU SÁCH" << SetColor(0, 15) << endl << endl
+                      << SetColor(0, 12)
+                      << L"\t0. Trở lại menu" << SetColor(0, 15) << endl
+                      << L"\t1. Tìm bằng ID" << endl
+                      << L"\t2. Tìm theo Tên" << endl
+                      << L"\t3. Tìm theo Tác giả" << endl
+                      << L"\t4. Tìm theo Thể loại" << endl << endl
+                      << L">> Nhập lựa chọn: ";
+                wcin >> searchSelection;
+            } while (searchSelection < 0 || searchSelection > 4);
+            clrscr();
+
+            if(searchSelection == 0) {
+                goto BackToMenu;
             }
-            else {
-                db->GetBook(index)->show();
+            if(searchSelection == 1) {
+                wcout << SetColor(0, 14) << L"TÌM ĐẦU SÁCH BẰNG ID" << SetColor(0, 15) << endl;
+                wstring id;
+                wcout << L">> Nhập ID: ";
+                wcin >> id;
+                int index = db->GetBookIndexByID(id);
+                if(index == -1) {
+                    wcout << SetColor(0, 12) << L"Không tìm thấy sách có ID "
+                        << SetColor(0, 14) << id << SetColor(0, 15) << endl;
+                }
+                else {
+                    db->GetBook(index)->show();
+                }
             }
+            if(searchSelection == 2) {
+                wcout << SetColor(0, 14) << L"TÌM ĐẦU SÁCH BẰNG TÊN" << SetColor(0, 15) << endl;
+                wstring name;
+                wcout << L">> Nhập tên đầu sách: ";
+                wcin.ignore();
+                wcin.ignore();
+                getline(wcin, name);
+                wcout << endl;
+                db->ShowByName(name);
+            }
+            if(searchSelection == 3) {
+                wcout << SetColor(0, 14) << L"TÌM ĐẦU SÁCH BẰNG TÁC GIẢ" << SetColor(0, 15) << endl;
+                wstring author;
+                wcout << L">> Nhập tên tác giả: ";
+                wcin.ignore();
+                wcin.ignore();
+                getline(wcin, author);
+                wcout << endl;
+                db->ShowByAuthor(author);
+            }
+            if(searchSelection == 4) {
+                wcout << SetColor(0, 14) << L"TÌM ĐẦU SÁCH BẰNG THỂ LOẠI" << SetColor(0, 15) << endl;
+                wstring category;
+                wcout << L">> Nhập tên thể loại: ";
+                wcin.ignore();
+                wcin.ignore();
+                getline(wcin, category);
+                wcout << endl;
+                db->ShowByCategory(category);
+            }
+            
         }   
 
-        // 3. add book (new book id = nextID)
-        if(menuSelection == 3) {
-            wstring id = intIDtoWstring(nextID);
-            wcout << SetColor(0, 15) << L"THÊM ĐẦU SÁCH MỚI VÀO DANH SÁCH" << endl
+        // 4. add book (new book id = nextID)
+        if(menuSelection == 4) {
+            /* TODO:
+                -> Choose where to add book
+                -> Input new book infor
+                -> Add it
+            */
+            int addSelection = -1, addIndex = -1;
+            do {
+                clrscr();
+                wcout << SetColor(0, 14) << L"THÊM ĐẦU SÁCH" << endl << endl
+                      << SetColor(0, 12)
+                      << L"\t0. Trở lại menu" << SetColor(0, 15) << endl
+                      << L"\t1. Thêm đầu sách vào cuối danh sách" << endl
+                      << L"\t2. Thêm đầu sách vào đầu danh sách" << endl
+                      << L"\t3. Thêm đầu sách vào vị trí chỉ định" << endl << endl
+                      << L">> Lựa chọn: ";
+                wcin >> addSelection;
+            } while(addSelection < 0 || addSelection > 3);
+            if(addSelection == 0) {
+                goto BackToMenu;
+            }
+            if(db->GetLength() == 0) {
+                addIndex = 0;
+            }
+            else if(addSelection == 3) {
+                wcout << SetColor(0, 14)
+                      <<  L"Vị trí thêm phải là số nguyên từ 0 -> " << db->GetLength()
+                      << endl << SetColor(0, 15);
+                do {
+                    wcout << L">> Nhập vị trí muốn thêm sách: ";
+                    wcin >> addIndex;
+                } while (addIndex < 0 || addIndex > db->GetLength());
+            }
+            clrscr();
+            wstring id = intIDtoWstring(db->GetNextID());
+            wcout << SetColor(0, 15) << L"THÊM ĐẦU SÁCH MỚI VÀO DANH SÁCH" << endl << endl
                   << SetColor(0, 10) << L"Đầu sách này sẽ có ID "
                   << SetColor(0, 14) << id << endl
                   << SetColor(0, 10) << L"Nhập thông tin sách mới: " << SetColor(0,15) << endl;
             Book newBook = inputNewBook(id);
-            db->addTail(newBook);
+            
+            if(addSelection == 1) {
+                db->addTail(newBook);
+            }
+            if(addSelection == 2) {
+                db->addHead(newBook);
+            }
+            if(addSelection == 3) {
+                db->addAt(addIndex, newBook);
+            }
+
             wcout << SetColor(0, 10) << L"Thêm thành công sách với ID "
                   << SetColor(0, 14) << id << SetColor(0, 15) << endl;
-            nextID++;   
         }
 
-        // 4. delete book by ID
-        if(menuSelection == 4) {
-            wstring id;
-            wcout << L"Nhập ID sách: ";
-            wcin >> id;
-
-            int index = db->GetBookIndexByID(id);
-            if(index == -1) {
-                wcout << SetColor(0, 12) << L"Không tìm thấy sách có ID "
-                      << SetColor(0, 14) << id << SetColor(0, 15) << endl;
-            }
-            else {
-                db->deleteAt(index);
-                wcout << SetColor(0, 10) << L"Xóa thành công sách có ID "
-                      << SetColor(0, 14) << id << SetColor(0, 15) << endl;
-            }
-        }
-
-        // 5. update book info by ID
+        // 5. delete book by ID
         if(menuSelection == 5) {
+            /* TODO:
+                Selection
+                    -> Delete specific book by id
+                        + Input ID
+                        + If book not Found -> Print message
+                        + If book found -> delete
+                    -> Delete All
+            */
+            int deleteSelection = -1;
+            do {
+                clrscr();
+
+                wcout << SetColor(0, 14) << L"XÓA ĐẦU SÁCH" << endl << endl
+                      << SetColor(0, 12)
+                      << L"\t0. Trở lại menu" << SetColor(0, 15) << endl
+                      << L"\t1. Xóa đầu sách có ID nhập từ bàn phím" << endl
+                      << L"\t2. Xóa tất cả đầu sách" << endl << endl
+                      << L">> Lựa chọn: ";
+                wcin >> deleteSelection;
+            } while(deleteSelection < 0 || deleteSelection > 2);
+            clrscr();
+            if(deleteSelection == 0) {
+                goto BackToMenu;
+            }
+            if(deleteSelection == 1) {
+                wstring id;
+                wcout << SetColor(0, 14) << L"XÓA ĐẦU SÁCH" << SetColor(0, 15) << endl << endl
+                      << L">> Nhập ID đầu sách muốn xóa: ";
+                wcin >> id;
+
+                int index = db->GetBookIndexByID(id);
+                if(index == -1) {
+                    wcout << SetColor(0, 12) << L"Không tìm thấy sách có ID "
+                        << SetColor(0, 14) << id << SetColor(0, 15) << endl;
+                }
+                else {
+                    db->deleteAt(index);
+                    wcout << SetColor(0, 10) << L"Xóa thành công sách có ID "
+                        << SetColor(0, 14) << id << SetColor(0, 15) << endl;
+                }
+            }
+            if(deleteSelection == 2) {
+                db->deleteAll();
+                wcout << SetColor(0, 10) << L"Xóa tất cả đầu sách thành công!" << SetColor(0, 15) << endl;
+            }
+            
+        }
+
+        // 6. update book info by ID
+        if(menuSelection == 6) {
+            /* TODO:
+                -> Input book id;
+                -> + If book not found -> Print message
+                   + If book found -> Input new info -> Update 
+            */
             wstring id;
-            wcout << L"Nhập ID sách: ";
+            wcout << SetColor(0, 14) << L"CẬP NHẬT THÔNG TIN ĐẦU SÁCH" << SetColor(0, 15) << endl << endl
+                  << L">> Nhập ID đầu sách muốn cập nhật: ";
             wcin >> id;
 
             int index = db->GetBookIndexByID(id);
@@ -118,34 +281,35 @@ int main() {
             }
         }
 
-        // 6. import data from file
-        if(menuSelection == 6) {
-
+        // 7. import data from file
+        if(menuSelection == 7) {
+            /* TODO:
+                -> Input name of data file;
+                (if file name = -1 -> back to menu)
+                -> Import
+            */
+            wcout << SetColor(0, 14) << L"NHẬP DANH SÁCH MỚI TỪ FILE" << endl 
+                  << SetColor(0, 12) << L"Lưu ý: \n\tDanh sách hiện tại sẽ bị xóa!" << endl
+                  << L"\tBạn có thể nhập tên file là -1 để trở lại menu" << SetColor(0, 15) << endl << endl;
             wstring fileName;
             wcout << L">> Nhập tên file: ";
             cin.ignore();
             wcin >> fileName;
-            importDataFromFile(fileName);
-
-            /* set nextID
-            TODO:
-                Find the highest ID (max)
-                Plus it to 1 and assign it to nextID
-            */
-            int max = -1;
-            for (int i = 0; i < db->GetLength(); i++) {
-                int id = stoi(db->GetBook(i)->GetID());
-                if(id > max) {
-                    max = id;
-                }
+            if(fileName == L"-1") {
+                goto BackToMenu;
             }
-            nextID = max + 1;
+            importDataFromFile(fileName);
         }
         
-        // 7. export data to file
-        if(menuSelection == 7) {
+        // 8. export data to file
+        if(menuSelection == 8) {
+            /* TODO:
+                -> Input name of export file;
+                -> Export
+            */
             wstring fileName;
-            wcout << L">> Nhập tên file: ";
+            wcout << SetColor(0, 14) << L"XUẤT DANH SÁCH RA FILE" << SetColor(0, 15) << endl << endl
+                  << L">> Nhập tên file: ";
             cin.ignore();
             wcin >> fileName;
             exportDataToFile(fileName);
@@ -153,6 +317,7 @@ int main() {
 
         if(menuSelection != 0)
             pause();
+        BackToMenu:;
     }
 
     SetColor(0, 7); //default console color
@@ -163,34 +328,23 @@ int main() {
 /**********************************************************************************/
 
 void printMenu() {
-    wcout << L"+--------------------------------------------------+" << endl
-          << L"|                                                  |" << endl
+    wcout << L"+-------------------------------------------------+" << endl
+          << L"|                                                 |" << endl
           << L"|            "
           << SetColor(0, 14) << L"QUẢN LÍ SÁCH TRONG CỬA HÀNG"
-          << SetColor(0, 15) << L"           |"                      << endl
-          << L"|                                                  |" << endl
-          << L"|            0. Thoát                              |" << endl
-          << L"|            1. In danh sách các đầu sách          |" << endl
-          << L"|            2. Xem thông tin sách                 |" << endl
-          << L"|            3. Thêm đầu sách                      |" << endl
-          << L"|            4. Xóa đầu sách                       |" << endl
-          << L"|            5. Cập nhật sách                      |" << endl
-          << L"|            6. Nhập danh sách từ file             |" << endl
-          << L"|            7. Xuất danh sách ra file             |" << endl
-          << L"|                                                  |" << endl
-          << L"+--------------------------------------------------+" << endl;
-}
-
-wstring intIDtoWstring(int id) {
-    /*
-        TODO: convert int id => wstring
-              add "0" until id length = 8
-    */
-    wstring strID = to_wstring(id);
-    while(strID.length() < 8) {
-        strID = L"0" + strID;
-    }
-    return strID;
+          << SetColor(0, 15) << L"          |"                      << endl
+          << L"|                                                 |" << endl
+          << L"|         0. Thoát                                |" << endl
+          << L"|         1. In danh sách tất cả đầu sách         |" << endl
+          << L"|         2. Sắp xếp lại danh sách                |" << endl
+          << L"|         3. Tìm xem thông tin đầu sách           |" << endl
+          << L"|         4. Thêm đầu sách                        |" << endl
+          << L"|         5. Xóa đầu sách                         |" << endl
+          << L"|         6. Cập nhật sách                        |" << endl
+          << L"|         7. Nhập danh sách từ file               |" << endl
+          << L"|         8. Xuất danh sách ra file               |" << endl
+          << L"|                                                 |" << endl
+          << L"+-------------------------------------------------+" << endl;
 }
 
 void importDataFromFile(wstring& fileName) {
@@ -233,7 +387,7 @@ void importDataFromFile(wstring& fileName) {
                 db->addTail(newBook);
             }
             fin.close();
-            wcout << L"Nhập dữ liệu thành công!" << endl;
+            wcout << SetColor(0, 10) <<  L"Nhập dữ liệu thành công!" << SetColor(0,15) << endl;
         }
         else {
             wcout << SetColor(0,12) << L"Mở file thất bại!" << SetColor(0,15) << endl;

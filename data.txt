@@ -1,15 +1,32 @@
-2
-00000001
+4
+00000010
 The Old Man and the Sea
 Ernest Hemingway
 Tiểu thuyết
 20
 10
 1
-00000010
+00000003
 Tuổi trẻ đáng giá bao nhiêu
 Rosie Nguyễn
 Thường thức
 10
 100
 70
+00000011
+A Brief History of Time
+Stephen Hawking
+Khoa học
+5
+1000
+999
+00000012
+The Universe in a Nutshell
+Stephen Hawking
+Khoa học
+4
+500
+300
+
+
+

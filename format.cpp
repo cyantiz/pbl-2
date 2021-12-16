@@ -1,9 +1,9 @@
 #pragma once
 #include <iostream>
 #include <Windows.h>
-#include <fcntl.h> //_O_WTEXT
-#include <io.h>    //_setmode()
-#include <locale> 
+#include <fcntl.h> //_O_WTEXT -> SetUniCode();
+#include <io.h>    //_setmode() -> SetUniCode();
+#include <locale>  
 #include <codecvt> 
 
 using namespace std;
@@ -12,6 +12,7 @@ void SetUnicode();
 wstring SetColor(int, int);
 void clrscr();
 void pause();
+wstring intIDtoWstring(int);
 wstring utf8_to_utf16(const string &);
 string utf16_to_utf8(const wstring &);
 
@@ -43,6 +44,18 @@ void clrscr() {
 void pause() {
     wcout << endl << SetColor(0,10) << L"Nhấn phím bất kỳ để tiếp tục..." << endl << SetColor(0,15);
     system("pause > nul");
+}
+
+wstring intIDtoWstring(int id) {
+    /*
+        TODO: convert int id => wstring
+              add "0" until id length = 8
+    */
+    wstring strID = to_wstring(id);
+    while(strID.length() < 8) {
+        strID = L"0" + strID;
+    }
+    return strID;
 }
 
 // string (utf8) -> u16string -> wstring

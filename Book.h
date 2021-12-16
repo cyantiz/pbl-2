@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include "format.h"
+#include "format.cpp"
 
 using namespace std;
 class Book {

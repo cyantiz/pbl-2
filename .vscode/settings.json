@@ -44,7 +44,8 @@
         "ctime": "cpp",
         "locale": "cpp",
         "xlocmes": "cpp",
-        "xloctime": "cpp"
+        "xloctime": "cpp",
+        "stack": "cpp"
     },
     "cSpell.ignoreRegExpList": [
         ".*"
