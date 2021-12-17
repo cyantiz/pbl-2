@@ -22,6 +22,7 @@ int main() {
     */
     // ==> go
     while(menuSelection != 0) {
+        Menu:
         menuSelection = -1;
         
         // menu and select
@@ -69,7 +70,7 @@ int main() {
                 wcin >> sortSelection;
             } while (sortSelection < 0 || sortSelection > 7);
             if(sortSelection == 0)
-                goto BackToMenu;
+                goto Menu;
             db->Sort(sortSelection);
             wcout << SetColor(0,10) << L"Sắp xếp danh sách thành công!" << SetColor(0,15) << endl; 
         }
@@ -95,7 +96,7 @@ int main() {
             Clrscr();
 
             if(searchSelection == 0) {
-                goto BackToMenu;
+                goto Menu;
             }
             if(searchSelection == 1) {
                 wcout << SetColor(0, 14) << L"TÌM ĐẦU SÁCH BẰNG ID" << SetColor(0, 15) << endl;
@@ -164,7 +165,7 @@ int main() {
                 wcin >> addSelection;
             } while(addSelection < 0 || addSelection > 3);
             if(addSelection == 0) {
-                goto BackToMenu;
+                goto Menu;
             }
             if(db->GetLength() == 0) {
                 addIndex = 0;
@@ -224,7 +225,7 @@ int main() {
             } while(deleteSelection < 0 || deleteSelection > 2);
             Clrscr();
             if(deleteSelection == 0) {
-                goto BackToMenu;
+                goto Menu;
             }
             if(deleteSelection == 1) {
                 wstring id;
@@ -322,7 +323,7 @@ int main() {
             cin.ignore();
             wcin >> fileName;
             if(fileName == L"-1") {
-                goto BackToMenu;
+                goto Menu;
             }
             importDataFromFile(fileName);
         }
@@ -343,7 +344,6 @@ int main() {
 
         if(menuSelection != 0)
             Pause();
-        BackToMenu:;
     }
 
     SetColor(0, 7); //default console color
