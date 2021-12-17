@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include <Windows.h> // -> Pause(), SetColor(), Clrscr()
 #include <fcntl.h> //_O_WTEXT -> SetUniCode();
@@ -20,12 +19,12 @@ string utf16_to_utf8(const wstring &);
 
 /******************************************************/
 
-void SetUnicode() {
+inline void SetUnicode() {
     _setmode(_fileno(stdout), _O_WTEXT); //needed for output
     _setmode(_fileno(stdin), _O_WTEXT); //needed for input
 }
 
-wstring SetColor(int background_color, int text_color)
+inline wstring SetColor(int background_color, int text_color)
 {
     HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     int color_code = background_color * 16 + text_color;
@@ -39,16 +38,16 @@ wstring SetColor(int background_color, int text_color)
     return L"";
 }
 
-void Clrscr() {
+inline void Clrscr() {
     system("cls");
 }
 
-void Pause() {
+inline void Pause() {
     wcout << endl << SetColor(0,10) << L"Nhấn phím bất kỳ để tiếp tục..." << endl << SetColor(0,15);
     system("pause > nul");
 }
 
-wstring IntIDtoWstring(int id) {
+inline wstring IntIDtoWstring(int id) {
     /*
         TODO: convert int id => wstring
               add "0" until id length = 8
@@ -60,13 +59,13 @@ wstring IntIDtoWstring(int id) {
     return strID;
 }
 
-wstring LowerCase(wstring wstr) {
+inline wstring LowerCase(wstring wstr) {
     std::transform(wstr.begin(), wstr.end(), wstr.begin(), ::tolower);
     return wstr;
 }
 
 // string (utf8) -> u16string -> wstring
-wstring utf8_to_utf16(const string& utf8)
+inline wstring utf8_to_utf16(const string& utf8)
 {
     wstring_convert<codecvt_utf8_utf16<char16_t>,char16_t> convert; 
     u16string utf16 = convert.from_bytes(utf8);
@@ -75,7 +74,7 @@ wstring utf8_to_utf16(const string& utf8)
 }
 
 // wstring -> u16string -> string (utf8)
-string utf16_to_utf8(const wstring& utf16) {
+inline string utf16_to_utf8(const wstring& utf16) {
     u16string u16str(utf16.begin(), utf16.end());
     wstring_convert<codecvt_utf8_utf16<char16_t>,char16_t> convert; 
     string utf8 = convert.to_bytes(u16str);

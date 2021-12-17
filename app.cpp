@@ -1,6 +1,4 @@
 #include <fstream>
-#include <string>
-#include "format.cpp"
 #include "BookStore.h"
 
 using namespace std;
