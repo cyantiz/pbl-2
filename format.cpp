@@ -1,18 +1,20 @@
 #pragma once
 #include <iostream>
-#include <Windows.h>
+#include <Windows.h> // -> Pause(), SetColor(), Clrscr()
 #include <fcntl.h> //_O_WTEXT -> SetUniCode();
 #include <io.h>    //_setmode() -> SetUniCode();
-#include <locale>  
-#include <codecvt> 
+#include <locale>  // -> convert UTF-8 <-> UTF-16
+#include <codecvt> // -> convert UTF-8 <-> UTF-16
+#include <algorithm> // transform -> LowerCase() for wstring
 
 using namespace std;
 
 void SetUnicode();
 wstring SetColor(int, int);
-void clrscr();
-void pause();
-wstring intIDtoWstring(int);
+void Clrscr();
+void Pause();
+wstring IntIDtoWstring(int);
+wstring LowerCase(wstring);
 wstring utf8_to_utf16(const string &);
 string utf16_to_utf8(const wstring &);
 
@@ -37,16 +39,16 @@ wstring SetColor(int background_color, int text_color)
     return L"";
 }
 
-void clrscr() {
+void Clrscr() {
     system("cls");
 }
 
-void pause() {
+void Pause() {
     wcout << endl << SetColor(0,10) << L"Nhấn phím bất kỳ để tiếp tục..." << endl << SetColor(0,15);
     system("pause > nul");
 }
 
-wstring intIDtoWstring(int id) {
+wstring IntIDtoWstring(int id) {
     /*
         TODO: convert int id => wstring
               add "0" until id length = 8
@@ -56,6 +58,11 @@ wstring intIDtoWstring(int id) {
         strID = L"0" + strID;
     }
     return strID;
+}
+
+wstring LowerCase(wstring wstr) {
+    std::transform(wstr.begin(), wstr.end(), wstr.begin(), ::tolower);
+    return wstr;
 }
 
 // string (utf8) -> u16string -> wstring

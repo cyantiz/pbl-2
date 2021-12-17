@@ -51,7 +51,7 @@ class BookStore {
         // Update
         void UpdateAt(int, Book &);
 
-        // show
+        // Show
         void ShowAll();
         void ShowByName(wstring);
         void ShowByAuthor(wstring);
@@ -111,7 +111,7 @@ Book* BookStore::GetBook(int index) {
     return this->p + index;
 }
 Book* BookStore::GetBookByIntID(int intID) {
-    wstring id = intIDtoWstring(intID);
+    wstring id = IntIDtoWstring(intID);
     int index = this->GetBookIndexByID(id);
     if(index == -1) {
         return NULL;
@@ -233,11 +233,11 @@ void BookStore::UpdateAt(int index, Book &b) {
     *(this->p + index) = b;
 }
 
-// show
+// Show
 void BookStore::ShowAll() {
     wcout << L"=====================LIST=======================" << endl;
     for (int i = 0; i < this->_length; i++) {
-        (this->p + i)->show();
+        (this->p + i)->Show();
     }
     wcout << L"===================END LIST=====================" << endl;
     wcout << L"Danh sách này có " << SetColor(0, 14) << this->_length << SetColor(0, 15) << L" đầu sách" << endl;
@@ -249,8 +249,8 @@ void BookStore::ShowAll() {
 void BookStore::ShowByName(wstring name) {
     int count = 0;
     for (int i = 0; i < this->_length; i++) {
-        if( (this-> p + i)->GetName() == name) {
-            (this->p + i)->show();
+        if( LowerCase((this-> p + i)->GetName()) == LowerCase(name) ) {
+            (this->p + i)->Show();
             count++;
         }
     }
@@ -266,8 +266,8 @@ void BookStore::ShowByName(wstring name) {
 void BookStore::ShowByAuthor(wstring author) {
     int count = 0;
     for (int i = 0; i < this->_length; i++) {
-        if( (this-> p + i)->GetAuthor() == author) {
-            (this->p + i)->show();
+        if( LowerCase((this-> p + i)->GetAuthor()) == LowerCase(author)) {
+            (this->p + i)->Show();
             count++;
         }
     }
@@ -283,8 +283,8 @@ void BookStore::ShowByAuthor(wstring author) {
 void BookStore::ShowByCategory(wstring category) {
     int count = 0;
     for (int i = 0; i < this->_length; i++) {
-        if( (this-> p + i)->GetCategory() == category) {
-            (this->p + i)->show();
+        if( LowerCase((this-> p + i)->GetCategory()) == LowerCase(category)) {
+            (this->p + i)->Show();
             count++;
         }
     }

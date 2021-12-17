@@ -29,13 +29,12 @@ int main() {
         
         // menu and select
         do {
-            clrscr();
+            Clrscr();
             printMenu();
             wcout << L">> Lựa chọn chức năng: ";
             wcin >> menuSelection;
         } while (menuSelection < 0 || menuSelection > 8);
-        
-        clrscr();
+        Clrscr();
         
         // 1. print list
         if(menuSelection == 1) {
@@ -57,7 +56,7 @@ int main() {
             */
             int sortSelection = -1;
             do {
-                clrscr();
+                Clrscr();
                 wcout << SetColor(0, 14) << L"SẮP XẾP DANH SÁCH CÁC ĐẦU SÁCH" << SetColor(0, 15) << endl << endl
                       << SetColor(0, 12)
                       << L"\t0. Trở lại menu" << SetColor(0, 15) << endl
@@ -77,7 +76,7 @@ int main() {
             wcout << SetColor(0,10) << L"Sắp xếp danh sách thành công!" << SetColor(0,15) << endl; 
         }
 
-        // 3. show specific book info by ID
+        // 3. Show specific book info by ID
         if(menuSelection == 3) {
             /*
                 + Choose what property of book to search by (id, name,...)
@@ -95,7 +94,7 @@ int main() {
                       << L">> Nhập lựa chọn: ";
                 wcin >> searchSelection;
             } while (searchSelection < 0 || searchSelection > 4);
-            clrscr();
+            Clrscr();
 
             if(searchSelection == 0) {
                 goto BackToMenu;
@@ -111,7 +110,7 @@ int main() {
                         << SetColor(0, 14) << id << SetColor(0, 15) << endl;
                 }
                 else {
-                    db->GetBook(index)->show();
+                    db->GetBook(index)->Show();
                 }
             }
             if(searchSelection == 2) {
@@ -156,7 +155,7 @@ int main() {
             */
             int addSelection = -1, addIndex = -1;
             do {
-                clrscr();
+                Clrscr();
                 wcout << SetColor(0, 14) << L"THÊM ĐẦU SÁCH" << endl << endl
                       << SetColor(0, 12)
                       << L"\t0. Trở lại menu" << SetColor(0, 15) << endl
@@ -181,8 +180,8 @@ int main() {
                     wcin >> addIndex;
                 } while (addIndex < 0 || addIndex > db->GetLength());
             }
-            clrscr();
-            wstring id = intIDtoWstring(db->GetNextID());
+            Clrscr();
+            wstring id = IntIDtoWstring(db->GetNextID());
             wcout << SetColor(0, 15) << L"THÊM ĐẦU SÁCH MỚI VÀO DANH SÁCH" << endl << endl
                   << SetColor(0, 10) << L"Đầu sách này sẽ có ID "
                   << SetColor(0, 14) << id << endl
@@ -215,7 +214,7 @@ int main() {
             */
             int deleteSelection = -1;
             do {
-                clrscr();
+                Clrscr();
 
                 wcout << SetColor(0, 14) << L"XÓA ĐẦU SÁCH" << endl << endl
                       << SetColor(0, 12)
@@ -225,7 +224,7 @@ int main() {
                       << L">> Lựa chọn: ";
                 wcin >> deleteSelection;
             } while(deleteSelection < 0 || deleteSelection > 2);
-            clrscr();
+            Clrscr();
             if(deleteSelection == 0) {
                 goto BackToMenu;
             }
@@ -271,11 +270,41 @@ int main() {
                       << SetColor(0, 14) << id << SetColor(0, 15) << endl;
             }
             else {
-                wcout << L"Cập nhật thông tin sách: " << endl;
+                wcout << SetColor(0, 10) << L"Thông tin đầu sách hiện tại"
+                      << SetColor(0, 15) << endl;
+                
+                db->GetBook(index)->Show();
+                
+                wcout << SetColor(0, 10) << L"Nhập thông tin mới: "
+                      << SetColor(0, 15) << endl;
                 Book newBook = inputNewBook(id);
-                db->UpdateAt(index, newBook);
-                wcout << SetColor(0, 10) << L"Cập nhật thành công sách có ID "
-                      << SetColor(0, 14) << id << SetColor(0, 15) << endl;
+                
+                Clrscr();
+                wcout << SetColor(0, 10) << L"Thông tin cũ"
+                      << SetColor(0, 15) << endl;
+                db->GetBook(index)->Show();
+                
+                wcout << SetColor(0, 10) << L"Thông tin mới"
+                      << SetColor(0, 15) << endl;
+                newBook.Show();
+
+                wstring promt = L"O";
+                wcout << SetColor(0,10) << L"Bạn có chắc muốn cập nhật thông tin không? (Y/N)"
+                      << SetColor(0, 15) << endl;
+                do {
+                    wcout << L">> Nhập Y (đồng ý) hoặc N (không đồng ý): ";
+                    wcin >> promt;
+                } while (promt != L"Y" && promt != L"N" && promt != L"y" && promt != L"n");
+                
+                if(promt == L"Y" || promt == L"y") {
+                    db->UpdateAt(index, newBook);
+                    wcout << SetColor(0, 10) << L"Cập nhật thành công đầu sách có ID "
+                          << SetColor(0, 14) << id << SetColor(0, 15) << endl;
+                }
+                else {
+                    wcout << SetColor(0, 12) << endl
+                          << L"Đã hủy tiến trình cập nhật" << endl;
+                }
             }
         }
 
@@ -314,7 +343,7 @@ int main() {
         }
 
         if(menuSelection != 0)
-            pause();
+            Pause();
         BackToMenu:;
     }
 

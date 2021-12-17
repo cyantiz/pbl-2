@@ -35,7 +35,7 @@ class Book {
         void SetSold(int);
 
         // show
-        void show();
+        void Show();
 };
 
 // constructor
@@ -89,7 +89,7 @@ void Book::SetSold(int sold) {
 }
 
 // show
-void Book::show() {  
+void Book::Show() {  
     wcout << SetColor(0, 14) <<  L"#" << this->id << L"  " << SetColor(0, 15);
     wcout << L"Tên:        " << this->name << endl
             << L"           Tác giả:    " << this->author << endl
