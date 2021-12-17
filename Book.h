@@ -4,19 +4,19 @@
 using namespace std;
 class Book {
     private:
-        wstring id;
-        wstring name;
-        wstring author;
-        wstring category;
-        double price; //dollars
-        int stock;
-        int sold;
+        wstring _id;
+        wstring _name;
+        wstring _author;
+        wstring _category;
+        double _price; //dollars
+        int _stock;
+        int _sold;
     public:
-        // constructor
+        // Constructors, Destroctors,
         Book(wstring = L"XXXXXXXX", wstring = L"null_name", wstring = L"null_author", wstring = L"null_category", double = 0.0, int = 0, int = 0);
         ~Book();
 
-        // Getter, Setter
+        // Getters, Setters
         wstring GetID();
         void SetID(wstring);
         wstring GetName();
@@ -32,6 +32,6 @@ class Book {
         int GetSold();
         void SetSold(int);
 
-        // show
+        // Show
         void Show();
 };

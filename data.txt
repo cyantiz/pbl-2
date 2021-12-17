@@ -1,4 +1,4 @@
-4
+6
 00000010
 The Old Man and the Sea
 Ernest Hemingway
@@ -25,8 +25,23 @@ The Universe in a Nutshell
 Stephen Hawking
 Khoa học
 4
-500
+0
 300
+00000001
+化物語
+西尾維新
+Tiểu thuyết
+5
+100
+99
+00000002
+この素晴らしい世界に祝福を! Ep 1
+暁なつめ
+Tiểu Thuyết
+7.99
+500
+1000
+
 
 
 

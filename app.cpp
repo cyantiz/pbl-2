@@ -32,6 +32,7 @@ int main() {
             wcout << L">> Lựa chọn chức năng: ";
             wcin >> menuSelection;
         } while (menuSelection < 0 || menuSelection > 8);
+        
         Clrscr();
         
         // 1. print list
@@ -397,16 +398,21 @@ void importDataFromFile(wstring& fileName) {
             int stock, sold;
             
             for(int i = 0; i < length; i++) {
+                // get book info
                 fin.ignore();
                 getline(fin, id);
                 getline(fin, name);
                 getline(fin, author);
                 getline(fin, category);
+                fin >> price >> sold >> stock;
+
+                // convert utf-8 string to utf-16 wstring 
                 wstring wid = utf8_to_utf16(id);
                 wstring wname = utf8_to_utf16(name);
                 wstring wauthor = utf8_to_utf16(author);
                 wstring wcategory = utf8_to_utf16(category);
-                fin >> price >> sold >> stock;
+                
+                // create a temp book and add it to database
                 Book newBook(wid, wname, wauthor, wcategory, price, sold, stock);
                 db->addTail(newBook);
             }
@@ -434,10 +440,13 @@ void exportDataToFile(wstring& fileName) {
         if( fout.is_open() ) {
             fout << db->GetLength() << endl;
             for (int i = 0; i < db->GetLength(); i++) {
+                // convert utf-16 wstring to utf-8 string
                 string id = utf16_to_utf8(db->GetBook(i)->GetID());
                 string name = utf16_to_utf8(db->GetBook(i)->GetName());
                 string author = utf16_to_utf8(db->GetBook(i)->GetAuthor());
                 string category = utf16_to_utf8(db->GetBook(i)->GetCategory());
+                
+                // write data to file
                 fout << id << endl
                      << name << endl
                      << author << endl
