@@ -34,4 +34,7 @@ class Book {
 
         // Show
         void Show();
+
+        // Input
+        void Input(wstring);
 };

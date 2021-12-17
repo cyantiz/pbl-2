@@ -6,7 +6,6 @@ using namespace std;
 void printMenu();
 void importDataFromFile(wstring &);
 void exportDataToFile(wstring &);
-Book &inputNewBook(wstring);
 
 int main() {
     // initial console setup
@@ -185,8 +184,8 @@ int main() {
                   << SetColor(0, 10) << L"Đầu sách này sẽ có ID "
                   << SetColor(0, 14) << id << endl
                   << SetColor(0, 10) << L"Nhập thông tin sách mới: " << SetColor(0,15) << endl;
-            Book newBook = inputNewBook(id);
-            
+            Book newBook;
+            newBook.Input(id);
             if(addSelection == 1) {
                 db->addTail(newBook);
             }
@@ -276,8 +275,9 @@ int main() {
                 
                 wcout << SetColor(0, 10) << L"Nhập thông tin mới: "
                       << SetColor(0, 15) << endl;
-                Book newBook = inputNewBook(id);
-                
+                Book newBook;
+                newBook.Input(id);
+
                 Clrscr();
                 wcout << SetColor(0, 10) << L"Thông tin cũ"
                       << SetColor(0, 15) << endl;
@@ -465,45 +465,4 @@ void exportDataToFile(wstring& fileName) {
     catch(...) {
         wcout << SetColor(0,12) << L"Xuất dữ liệu thất bại!" << SetColor(0,15) << endl;
     }
-}
-
-Book& inputNewBook(wstring id) {
-    /*
-        input all information of a book
-        Create a book object with input information --> return that object;
-    */
-
-    wstring name;
-    wstring author;
-    wstring category;
-    double price = -1; //dollars
-    int sold = -1;
-    int stock = -1;
-
-    // input information
-    wcout << L">> Nhập tên sách: ";
-    wcin.ignore();
-    wcin.ignore();
-    getline(wcin, name);
-    wcout << L">> Nhập tên tác giả: ";
-    wcin.ignore();
-    getline(wcin, author);
-    wcout << L">> Nhập thể loại: ";
-    wcin.ignore();
-    getline(wcin, category);
-    do {
-        wcout << L">> Nhập giá sách ($): ";
-        wcin >> price;
-    } while (price <= 0);
-    do {
-        wcout << L">> Nhập số lượng trong kho: ";
-        wcin >> stock;
-    } while (stock < 0);
-    do {
-        wcout << L">> Nhập số lượng đã bán: ";
-        wcin >> sold;
-    } while (sold < 0);
-
-    Book *newBook = new Book(id, name, author, category, price, stock, sold);
-    return *newBook;
 }

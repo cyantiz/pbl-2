@@ -61,3 +61,45 @@ void Book::Show() {
     wcout   << L"           Trong kho:  "  << this->_stock << endl
             << L"           Đã bán:     "  << this->_sold << endl;
 }
+
+// Input
+void Book::Input(wstring id) {
+    wstring name;
+    wstring author;
+    wstring category;
+    double price = -1; //dollars
+    int sold = -1;
+    int stock = -1;
+
+    // input information
+    wcout << L">> Nhập tên sách: ";
+    wcin.ignore();
+    wcin.ignore();
+    getline(wcin, name);
+    wcout << L">> Nhập tên tác giả: ";
+    wcin.ignore();
+    getline(wcin, author);
+    wcout << L">> Nhập thể loại: ";
+    wcin.ignore();
+    getline(wcin, category);
+    do {
+        wcout << L">> Nhập giá sách ($): ";
+        wcin >> price;
+    } while (price <= 0);
+    do {
+        wcout << L">> Nhập số lượng trong kho: ";
+        wcin >> stock;
+    } while (stock < 0);
+    do {
+        wcout << L">> Nhập số lượng đã bán: ";
+        wcin >> sold;
+    } while (sold < 0);
+
+    this->_id = id;
+    this->_name = name;
+    this->_author = author;
+    this->_category = category;
+    this->_price = price;
+    this->_sold = sold;
+    this->_stock = stock;
+}
